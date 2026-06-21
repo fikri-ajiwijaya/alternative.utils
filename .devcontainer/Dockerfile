@@ -8,10 +8,23 @@ RUN apt-get update && \
 
 RUN apt-get -y install curl git gnupg jq less man parallel patch ssh vim wget xz-utils
 
-RUN apt-get -y install ffmpeg
+RUN apt-get -y install bzip2 ffmpeg
 
 ARG USERNAME
 RUN useradd "${USERNAME}" -ms '/bin/bash'
+
+USER "${USERNAME}"
+
+COPY --chmod=644 'environment.yaml' "/home/${USERNAME}"
+RUN curl -L https://micro.mamba.pm/api/micromamba/$(uname)-$(uname -m)/latest | tar -jvxC "${HOME}" bin/micromamba && \
+    . ~/.profile && \
+    micromamba shell init -s bash -r "${HOME}/micromamba" && \
+    micromamba config append channels conda-forge && \
+    micromamba config set channel_priority strict && \
+    micromamba -y install -f "${HOME}/environment.yaml" && \
+    printf '\nmicromamba activate\n' >> "${HOME}/.bashrc"
+
+USER root
 
 ARG COMPOSE_PROJECT_NAME
 COPY --chmod=644 --chown="${USERNAME}:${USERNAME}" '.vimrc' "/home/${USERNAME}"
