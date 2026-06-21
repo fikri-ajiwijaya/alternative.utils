@@ -8,6 +8,8 @@ RUN apt-get update && \
 
 RUN apt-get -y install curl git gnupg jq less man parallel patch ssh vim wget xz-utils
 
+RUN apt-get -y install ffmpeg
+
 ARG USERNAME
 RUN useradd "${USERNAME}" -ms '/bin/bash'
 
