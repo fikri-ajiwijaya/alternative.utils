@@ -8,7 +8,7 @@ RUN apt-get update && \
 
 RUN apt-get -y install curl git gnupg jq less man parallel patch ssh vim wget xz-utils
 
-RUN apt-get -y install bzip2 ffmpeg
+RUN apt-get -y install aria2 bzip2 ffmpeg
 
 ARG USERNAME
 RUN useradd "${USERNAME}" -ms '/bin/bash'
